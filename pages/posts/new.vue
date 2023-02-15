@@ -22,20 +22,40 @@
   </main>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import MdEditor from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+
+const user = useSupabaseUser()
+const supabase = useSupabaseClient();
 
 definePageMeta({
   middleware: ['auth'],
 })
 
-const post = ref({
+const post = reactive({
   title: '',
   content: '',
 })
 
-const createPost = () => {}
+const createPost = async () => {
+    if(!post.title || !post.content){
+        alert("Título o contenido vacío")
+        return;
+    }
+
+
+    const { data : result, error }  = await supabase.from('posts').insert([
+        {title:post.title, content:post.content, user_id: user.value.id, user_email: user.value.email}
+    ])
+    if(error){
+        alert(error.message)
+    } else{
+        console.log(result)
+    }
+
+}
+
 </script>
 
 <style scoped></style>

@@ -36,8 +36,6 @@ const login = async () => {
     email: email.value,
     password: password.value,
   })
-  console.log('user', data)
-  console.log('error', error)
 }
 
 const user = useSupabaseUser()
